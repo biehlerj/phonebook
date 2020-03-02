@@ -71,8 +71,6 @@ const generateId = (min) => {
     return generatedId;
 };
 
-app.get('/', (req, res) => res.send('<h1>Hello World!</h1>'));
-
 app.get('/api/persons', (request, response) => response.json(phonebook));
 
 app.post('/api/persons', (request, response) => {
