@@ -12,7 +12,7 @@
     "watch": "nodemon index.js",
     "build:ui": "rm -rf build && cd ~/github.com/biehlerj/fullstackopen_part3_exercises/phonebook-frontend && yarn build --prod && cp -r build ~/github.com/biehlerj/phonebook",
     "deploy": "git push heroku master",
-    "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && yarn deploy",
+    "deploy:full": "yarn build:ui && ./commit-message.sh '$1' && yarn deploy",
     "logs:prod": "heroku logs --tail"
   },
   "devDependencies": {
