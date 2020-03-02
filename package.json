@@ -2,6 +2,7 @@
   "name": "phonebook-backend",
   "version": "0.0.1",
   "main": "index.js",
+  "author": "Jacob Biehler",
   "license": "MIT",
   "engines": {
     "node": "8.16.0"
