@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
-    "build:ui": "rm -rf build && cd ~/github.com/biehlerj/fullstackopen_part3_exercises/phonebook-frontend && yarn build --prod && cp -r build ~/github.com/biehlerj/fullstackopen_part3_exercises/phonebook-backend",
+    "build:ui": "rm -rf build && cd ~/github.com/biehlerj/fullstackopen_part3_exercises/phonebook-frontend && yarn build --prod && cp -r build ~/github.com/biehlerj/phonebook",
     "deploy": "git push heroku master",
     "deploy:full": "yarn build:ui && git add . && git commit -m uibuild && yarn deploy",
     "logs:prod": "heroku logs --tail"
