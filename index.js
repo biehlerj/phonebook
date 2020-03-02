@@ -1,17 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const cors = require('cors');
+
+const app = express();
 
 morgan.token('body', (req, res) => {
     return JSON.stringify(req.body);
 });
 
-const app = express();
-app.use(bodyParser.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
-app.use(cors());
 app.use(express.static('build'));
+app.use(bodyParser.json());
 
 const requestLogger = (request, response, next) => {
     console.log('Method:', request.method);
@@ -20,8 +19,6 @@ const requestLogger = (request, response, next) => {
     console.log('---');
     next();
 };
-
-app.use(requestLogger);
 
 let phonebook = [
     {
@@ -140,6 +137,7 @@ const unknownEndpoint = (request, response) => {
 };
 
 app.use(unknownEndpoint);
+app.use(requestLogger);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
