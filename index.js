@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const Person = require('./models/person');
 
 const app = express();
 
@@ -63,15 +65,7 @@ let phonebook = [
     }
 ];
 
-const generateId = (min) => {
-    const max = Math.floor(50000000000000);
-    min = Math.ceil(min);
-    const generatedId = Math.floor(Math.random() * (max - min)) + min;
-
-    return generatedId;
-};
-
-app.get('/api/persons', (request, response) => response.json(phonebook));
+app.get('/api/persons', (request, response) => Person.find({}).then(person => response.json(person.map(p => p.toJSON()))));
 
 app.post('/api/persons', (request, response) => {
     const body = request.body;
