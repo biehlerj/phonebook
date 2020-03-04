@@ -22,106 +22,34 @@ const requestLogger = (request, response, next) => {
     next();
 };
 
-let phonebook = [
-    {
-        'name': 'Ada Lovelace',
-        'number': '123456789',
-        'id': 1
-    },
-    {
-        'name': 'Dan Abramov',
-        'number': '12-43-234345',
-        'id': 2
-    },
-    {
-        'name': 'Mary Poppendieck',
-        'number': '39-23-6423122',
-        'id': 3
-    },
-    {
-        'name': 'Jacob Biehler',
-        'number': '8584845307',
-        'id': 6
-    },
-    {
-        'name': 'henlo',
-        'number': '0987654321',
-        'id': 7
-    },
-    {
-        'name': 'hello',
-        'number': '1234567890',
-        'id': 8
-    },
-    {
-        'name': 'wowee',
-        'number': '159753456',
-        'id': 9
-    },
-    {
-        'name': 'ejwpajfio',
-        'number': '1919189',
-        'id': 10
-    }
-];
-
 app.get('/api/persons', (request, response) => Person.find({}).then(person => response.json(person.map(p => p.toJSON()))));
 
 app.post('/api/persons', (request, response) => {
     const body = request.body;
-    let name;
-    let number;
 
-    if (body.name) {
-        name = body.name;
-    } else {
-        return response.status(400).json({error: 'Name is missing'});
-    }
+    const person = new Person({
+        name: body.name,
+        number: body.number,
+    });
 
-    if (body.number) {
-        number = body.number;
-    } else {
-        return response.status(400).json({error: 'Number is missing'});
-    }
-
-    const duplicateName = phonebook.filter(person => person.name === name);
-    if (duplicateName.length > 0) {
-        return response.status(400).json({error: 'Name must be unique'});
-    }
-
-    const person = {
-        name: name,
-        number: number,
-        id: generateId(phonebook.length),
-    };
-
-    phonebook = phonebook.concat(person);
-
-    response.json(person);
+    person.save().then(savedPerson => savedPerson.toJSON());
 });
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
-    const person = phonebook.find(person => person.id === id);
-
-    if (person) {
-        response.json(person);
-    } else {
-        response.status(404).end();
-    }
+    Person.findById(request.params.id).then(person => response.json(person.toJSON()));
 });
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id);
+// app.delete('/api/persons/:id', (request, response) => {
+//     const id = Number(request.params.id);
 
-    phonebook = phonebook.filter(person => person.id !== id);
-    response.status(204).end();
-});
+//     phonebook = phonebook.filter(person => person.id !== id);
+//     response.status(204).end();
+// });
 
 app.get('/info', (request, response) => {
     const date = new Date();
 
-    response.send(`Phonebook has info for ${phonebook.length} people\n\n${date}`);
+    response.send(`Phonebook has info for ${Person.length} people\n\n${date}`);
 });
 
 const unknownEndpoint = (request, response) => {
